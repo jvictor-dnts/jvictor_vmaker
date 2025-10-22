@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JVictor Videomaker - Autoridade em Vídeos</title>
+    
+    <style>
+        /* --- 1. Configurações Globais e Paleta (Cinza, Branco, Preto) --- */
+        :root {
+            --cor-fundo: #0a0a0a; /* Preto/Cinza bem escuro */
+            --cor-fundo-secundario: #1a1a1a; /* Cinza escuro para seções */
+            --cor-texto-principal: #FFFFFF;
+            --cor-texto-secundario: #b3b3b3;
+            --cor-destaque: #E0E0E0; /* Cinza claro para destaque (GLOBAL) */
+            --cor-borda: #2a2a2a;
+            --cor-cinza-claro: #E0E0E0;
+            --cor-cinza-medio: #888888;
+            /* Cor azul substituída por uma referência global de destaque cinza ou cinza escuro */
+            --cor-azul-destaque: var(--cor-destaque); /* Agora usa o cinza claro de destaque */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        h1, h2, h3 {
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--cor-texto-principal);
+        }
+
+        /* Span de destaque (CINZA) */
+        h1 span, h2 span, h3 span {
+            color: var(--cor-destaque);
+        }
+        
+        /* Título de seção centralizado (Reutilizável) */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        p {
+            color: var(--cor-texto-secundario);
+            margin-bottom: 1rem;
+        }
+        
+        /* Destaque em negrito dentro dos parágrafos */
+        p strong {
+            color: var(--cor-texto-principal);
+            font-weight: 600;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--cor-destaque);
+        }
+
+        /* --- 2. Cabeçalho --- */
+        .header {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--cor-borda);
+            text-align: center;
+        }
+        
+        .header .logo {
+            max-height: 50px;
+            width: auto;
+            margin: 0 auto;
+            filter: brightness(1.2);
+        }
+
+        /* --- 3. Seção Hero (Principal) --- */
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background-color: var(--cor-fundo-secundario);
+        }
+
+        .hero-background-images {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-background-images img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.08;
+            filter: grayscale(100%) brightness(0.5);
+            position: relative;
+            transition: transform 0.5s ease-out;
+        }
+        .hero-background-images img:nth-child(1) { transform: rotate(-5deg) scale(1.1); }
+        .hero-background-images img:nth-child(2) { transform: rotate(5deg) scale(1.1); }
+        .hero-background-images img:nth-child(3) { transform: rotate(-3deg) scale(1.1); }
+
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .hero-text h2 {
+            font-size: 3.2rem;
+            font-weight: 700;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-image img {
+            max-width: 550px;
+            border-radius: 8px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--cor-destaque);
+            color: var(--cor-fundo);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: var(--cor-cinza-medio);
+            transform: translateY(-3px);
+        }
+
+        /* --- 4. SEÇÃO PORTFOLIO (REMOVIDA COMPLETAMENTE) --- */
+        /* Todo o CSS relacionado ao .portfolio foi removido */
+
+
+        /* --- 5. NOVA SEÇÃO "QUEM SOU EU" (Estilo Card) --- */
+        .about {
+            background-color: var(--cor-fundo);
+            padding: 5rem 0;
+        }
+        
+        .about-card {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr; /* Coluna da foto / Coluna do texto */
+            background-color: var(--cor-fundo-secundario);
+            border-radius: 15px;
+            overflow: hidden; /* Para a imagem se ajustar à borda */
+            border: 1px solid var(--cor-borda); /* Borda agora é cinza */
+            box-shadow: 0 0 20px rgba(224, 224, 224, 0.05); /* Sombra agora é cinza/branca */
+        }
+        
+        .about-image-wrapper {
+            position: relative;
+            background-color: var(--cor-fundo); /* Fundo agora é escuro */
+        }
+        
+        /* Efeito de borda interna na imagem (agora cinza) */
+        .about-image-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 15px; /* Espaçamento interno */
+            border: 2px solid rgba(224, 224, 224, 0.3); /* Borda agora é cinza */
+            z-index: 2;
+            border-radius: 5px;
+        }
+        
+        .about-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+        }
+
+        .about-text {
+            padding: 3rem;
+        }
+
+        .about-text h3 {
+            font-size: 2.8rem;
+        }
+        
+        /* Título "JVictor" (agora cinza destaque) */
+        .about-text h3 span {
+            color: var(--cor-destaque); /* Usa o cinza claro de destaque */
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-text p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        /* --- 6. NOVA SEÇÃO "VANTAGENS" --- */
+        .advantages {
+            background-color: var(--cor-fundo-secundario);
+            padding: 5rem 0;
+        }
+        
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .advantages-image {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .advantages-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+        }
+        
+        /* Overlay cinza na imagem de vantagens */
+        .advantages-image::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--cor-destaque); /* Usa o cinza claro de destaque */
+            opacity: 0.1; /* Opacidade reduzida para ser sutil */
+        }
+
+        .advantages-text h3 {
+            font-size: 2.8rem;
+        }
+        
+        .advantages-text h3 span {
+            color: var(--cor-destaque); /* Usa o cinza claro de destaque */
+        }
+        
+        .advantages-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        
+        .advantages-list li {
+            font-size: 1.1rem;
+            color: var(--cor-texto-principal);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            background-color: var(--cor-fundo); /* Fundo escuro para o item */
+            padding: 0.8rem 1.2rem;
+            border-radius: 5px;
+            border-left: 3px solid var(--cor-destaque); /* Usa o cinza claro de destaque */
+        }
+        
+        /* "Ponto" cinza da lista */
+        .advantages-list li::before {
+            content: '•';
+            color: var(--cor-destaque); /* Usa o cinza claro de destaque */
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            line-height: 1;
+        }
+        
+        .advantages-list li strong {
+            color: var(--cor-texto-principal);
+            font-weight: 600;
+        }
+
+        /* --- 7. SEÇÃO "MEUS SERVIÇOS" (Cards) --- */
+        .my-services {
+            background-color: var(--cor-fundo);
+            padding: 5rem 0;
+        }
+
+        .my-services .section-title span {
+            color: var(--cor-destaque); /* Usa o cinza claro de destaque */
+        }
+
+        /* Subtítulo */
+        .my-services .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--cor-texto-secundario);
+            max-width: 600px;
+            margin: -2rem auto 3rem auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            position: relative;
+            height: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--cor-borda);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cor-fundo); /* Overlay agora é preto/fundo */
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+        
+        .service-card h3 {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cor-texto-principal);
+            z-index: 2;
+        }
+
+        .service-card:hover img {
+            filter: grayscale(0%);
+        }
+
+        .service-card:hover .card-overlay {
+            opacity: 0.4;
+        }
+
+        /* --- 8. Seção Pilares e Depoimentos --- */
+        .services {
+            background-color: var(--cor-fundo-secundario);
+            text-align: center;
+        }
+        
+        .services-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+
+        .services-list {
+            list-style: none;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        
+        .services-list li {
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: flex-start;
+            color: var(--cor-texto-principal);
+        }
+        
+        /* Checkmark (cinza claro) */
+        .checkmark {
+            color: var(--cor-destaque);
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            line-height: 1;
+        }
+        
+        /* Span de destaque nos pilares (cinza claro) */
+        .services-list li span {
+            color: var(--cor-destaque);
+        }
+
+        /* --- Depoimentos --- */
+        .testimonials {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 2px solid var(--cor-borda);
+            background-color: var(--cor-fundo);
+            padding: 2rem;
+        }
+
+        .testimonial-slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .testimonial-item {
+            min-width: 100%;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .testimonial-item img {
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid var(--cor-borda);
+            filter: grayscale(10%);
+        }
+
+        .slider-controls {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background-color: var(--cor-borda);
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--cor-destaque);
+        }
+
+        /* --- 9. Seção CTA Final (WhatsApp) --- */
+        .cta-final {
+            background-color: var(--cor-destaque);
+            text-align: center;
+        }
+        
+        .cta-final h2 {
+            font-size: 2.3rem;
+            color: var(--cor-fundo);
+            max-width: 700px;
+            margin: 0 auto 1.5rem auto;
+        }
+        
+        /* Destaque do CTA (agora cinza claro) */
+        .cta-final h2 span {
+            color: var(--cor-fundo);
+        }
+        
+        .cta-button-final {
+            display: inline-block;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button-final:hover {
+            transform: scale(1.05);
+            background-color: var(--cor-fundo-secundario);
+        }
+
+        /* --- 10. Rodapé --- */
+        .footer {
+            background-color: #000;
+            color: var(--cor-texto-secundario);
+            text-align: center;
+            padding: 2rem 0;
+            font-size: 0.9rem;
+        }
+
+        /* --- 11. CSS RESPONSIVO (Para Celulares) --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 2.2rem; }
+            
+            section { padding: 3rem 0; }
+
+            .hero {
+                min-height: auto;
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+            }
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-image {
+                order: -1;
+                margin-bottom: 2rem;
+            }
+            .hero-image img {
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            .hero-text h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero-background-images { display: none; }
+
+            /* A seção .portfolio-grid foi removida, então este @media não é mais necessário */
+            /* .portfolio-grid {
+                grid-template-columns: 1fr;
+            } */
+
+            /* "Quem Sou Eu" no celular */
+            .about-card {
+                grid-template-columns: 1fr; /* Coluna única */
+            }
+            .about-image-wrapper {
+                min-height: 350px; /* Altura mínima para a foto */
+            }
+            .about-text {
+                padding: 2rem;
+                text-align: center;
+            }
+            
+            /* "Vantagens" no celular */
+            .advantages-grid {
+                grid-template-columns: 1fr; /* Coluna única */
+            }
+            .advantages-image {
+                order: -1; /* Imagem vai para cima */
+                margin-bottom: 2rem;
+            }
+            
+            /* Meus Serviços no celular */
+            .services-grid {
+                grid-template-columns: 1fr; /* Coluna única */
+            }
+
+            .services-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .testimonials {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <img src="logo maior.png" alt="JVictor Videomaker Logo" class="logo">
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-background-images">
+                <img src="image_2ce9c3.jpg" alt="Trabalho de Barbearia Fundo">
+                <img src="image_2ce9a7.jpg" alt="Trabalho de Maquiagem Fundo">
+                <img src="image_2ce98c.jpg" alt="Trabalho Automotivo Fundo">
+            </div>
+
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <h2>Transformando visões em realidade: sua história, seu legado, seu <span>impacto</span> em vídeo.</h2>
+                    <p>Em um mundo cada vez mais visual, pessoas, marcas e negócios estão se destacando e conquistando seu espaço ao investir em conteúdo audiovisual de alta qualidade. Minha missão é capturar a essência da sua mensagem, eternizar momentos e elevá-los a um novo patamar.</p>
+                    <a href="#cta-final" class="cta-button">Transforme sua imagem agora</a>
+                </div>
+                <div class="hero-image">
+                    <img src="Design sem nome (5).png" alt="JVictor Videomaker com equipamento">
+                </div>
+            </div>
+        </section>
+
+        <section class="about">
+            <div class="container">
+                <div class="about-card">
+                    <div class="about-image-wrapper">
+                        <img src="ft . 4.jpeg" alt="JVictor Videomaker Retrato">
+                    </div>
+                    <div class="about-text">
+                        <h3>Quem é <span>JVictor?</span></h3>
+                        <p>Olá, eu sou o <strong>João Victor!</strong> Tenho 16 anos e comecei como videomaker há aproximadamente 1 ano. Desde então, venho ganhando experiência e me aprofundando nessa área que eu tanto gosto.</p>
+                        <p>Para mim, o audiovisual é fundamental. Eu acredito que não são apenas "videozinhos": o vídeo tem uma importância extrema, seja para <strong>eternizar momentos inesquecíveis</strong> ou para <strong>fortalecer a imagem de uma marca</strong> e gerar autoridade.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="advantages">
+            <div class="container">
+                <div class="advantages-grid">
+                    <div class="advantages-image">
+                        <img src="apont.jpg" alt="Equipamento JVictor Videomaker">
+                    </div>
+                    <div class="advantages-text">
+                        <h3>Vantagens ao <span>fechar comigo</span></h3>
+                        <ul class="advantages-list">
+                            <li><strong>Olhar Jovem e Criativo:</strong> Trazendo ideias novas e uma estética moderna para o seu projeto.</li>
+                            <li><strong>Edição de Qualidade:</strong> Pós-produção detalhada para um resultado profissional e impactante.</li>
+                            <li><strong>Acompanhamento Completo:</strong> Contato direto na pré-produção (planejamento) e pós-produção (ajustes).</li>
+                            <li><strong>Totalmente Personalizado:</strong> O vídeo é feito exatamente no estilo que você deseja e precisa.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="my-services">
+            <div class="container">
+                <h2 class="section-title">Meus <span>Serviços</span></h2>
+                
+                <p class="section-subtitle">Estes são alguns exemplos, mas o leque é muito maior. Além desses, há muito mais!</p>
+
+                <div class="services-grid">
+                    <div class="service-card">
+                        <img src="marcas.jpeg" alt="Negócios e Marcas">
+                        <div class="card-overlay"></div>
+                        <h3>Negócios & Marcas</h3>
+                    </div>
+                    <div class="service-card">
+                        <img src="aniversários.jpeg" alt="Ensaios e Retratos">
+                        <div class="card-overlay"></div>
+                        <h3>Casamentos & Aniversários</h3>
+                    </div>
+                    <div class="service-card">
+                        <img src="aftermovie.jpeg" alt="Videoclipes e Eventos">
+                        <div class="card-overlay"></div>
+                        <h3>Eventos & Aftermovies</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="services">
+            <div class="container">
+                <h2 class="section-title"> <span>Feedbacks</span> de alguns clientes:</h2>
+                <div class="services-content">
+                    <ul class="services-list">
+                        <li><span class="checkmark">✔</span>Posicionamento claro da sua marca</li>
+                        <li><span class="checkmark">✔</span> Levamos juntos um conteúdo que seu público entende</li>
+                        <li><span class="checkmark">✔</span> Edição e Pós-Produção de Alto Nível</li>
+                        <li><span class="checkmark">✔</span> Vídeos que as pessoas assistem até o fim </li>
+                        <li><span class="checkmark">✔</span> Um Visual que se destaca da concorrência</li>
+                    </ul>
+
+                    <div class="testimonials">
+                        <div class="testimonial-slider" id="testimonial-slider">
+                            <div class="testimonial-item">
+                                <img src="fedback 1.jpeg" alt="Depoimento 1">
+                            </div>
+                            <div class="testimonial-item">
+                                <img src="fedback 2.jpeg" alt="Depoimento 2">
+                            </div>
+                            <div class="testimonial-item">
+                                <img src="feedback 3.jpeg" alt="Depoimento 3">
+                            </div>
+                            <div class="testimonial-item">
+                                <img src="feedbac 4.jpeg" alt="Depoimento 4">
+                            </div>
+                            <div class="testimonial-item">
+                                <img src="feedback 5.jpeg" alt="Depoimento 5">
+                            </div>
+                        </div>
+                        <div class="slider-controls" id="slider-dots">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-final" id="cta-final">
+            <div class="container">
+                <h2>Pronto para levar sua marca ou momento ao <span>próximo nível?</span></h2>
+                <a href="https://wa.me/5584991319547" target="_blank" class="cta-button-final">
+                    Fale agora pelo WhatsApp!
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 JVictor Videomaker.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- JavaScript para o Slider de Depoimentos ---
+        const slider = document.getElementById('testimonial-slider');
+        const dotsContainer = document.getElementById('slider-dots');
+        const items = document.querySelectorAll('.testimonial-item');
+        let currentIndex = 0;
+
+        // Gera os dots dinamicamente
+        for (let i = 0; i < items.length; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                updateSlider();
+            });
+            dotsContainer.appendChild(dot);
+        }
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % items.length;
+            updateSlider();
+        }
+
+        // Auto-play do slider
+        setInterval(nextSlide, 5000); // Muda de slide a cada 5 segundos
+
+        // Inicializa o slider
+        updateSlider();
+    </script>
+
+</body>
+</html>
